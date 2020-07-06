@@ -1,0 +1,27 @@
+#!/bin/bash
+
+ROOT_DIR="$(cd "$(dirname $0)" && pwd)"/..
+
+SUBDOMAIN=$1
+WSPORT=$2
+
+if [ -z "$SUBDOMAIN" ] || [ -z "$SUBDOMAIN" ]
+then
+    echo "用法 $0 域名 端口"
+    exit
+fi
+
+HARDWARE=`uname -m`
+
+case $HARDWARE in
+    x86_64)
+        BIN_NAME=frpc_386
+        ;;
+    armv7l)
+        BIN_NAME=frpc_arm
+        ;;
+    *)
+        echo "未识别的硬件架构"
+esac
+
+SUBDOMAIN=$SUBDOMAIN WSPORT=$WSPORT $ROOT_DIR/bin/hardware.d/$BIN_NAME -c $ROOT_DIR/config/frpc.ini
